@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Descuento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            width: 100%;
+            max-width: 450px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px #ccc;
+            border: 1px solid #ddd;
+        }
+
+        h2 { 
+            text-align: center; 
+            font-size: 22px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .resultado {
+            display: block;
+            margin-top: 5px;
+            font-size: 26px;
+            color: green;
+            font-weight: bold;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            margin-top: 25px;
+            cursor: pointer;
+            border: none;
+            background: #d9534f;
+            color: white;
+            border-radius: 5px;
+        }
+
+        button:hover { 
+            background: #c9302c; 
+        }
+
+        .info {
+            font-size: 12px;
+            text-align: center;
+            margin-top: 15px;
+            color: #666;
+        }
+
+        /* Mejoras para teléfonos */
+        @media (max-width: 480px) {
+            h2 { font-size: 20px; }
+            input[type="number"] { font-size: 16px; }
+            button { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora de Descuento</h2>
+        
+        <label for="monto">Monto Total:</label>
+        <input type="number" id="monto" placeholder="Ingrese el monto" step="0.01" min="0">
+        
+        <label for="descuento">Porcentaje de Descuento (%):</label>
+        <input type="number" id="descuento" value="20" min="0" max="100">
+        
+        <label for="maximo">Descuento Máximo ($):</label>
+        <input type="number" id="maximo" value="15" min="0" step="0.01">
+        
+        <button onclick="calcularDescuento()">Calcular Descuento</button>
+        
+        <div class="info">
+            <h3>Resultados:</h3>
+            <p>Descuento aplicado: <span id="descuentoAplicado" class="resultado">$0.00</span></p>
+            <p>Monto final a pagar: <span id="montoFinal" class="resultado">$0.00</span></p>
+            <p>Monto con descuento máximo: <span id="montoMaximo" class="resultado">$75.00</span></p>
+        </div>
+    </div>
+
+    <script>
+        function calcularDescuento() {
+            // Obtener valores de los inputs
+            const monto = parseFloat(document.getElementById('monto').value) || 0;
+            const porcentaje = parseFloat(document.getElementById('descuento').value) || 0;
+            const maximo = parseFloat(document.getElementById('maximo').value) || 0;
+            
+            // Calcular descuento normal
+            const descuentoNormal = (monto * porcentaje) / 100;
+            
+            // Aplicar límite máximo
+            const descuentoAplicado = Math.min(descuentoNormal, maximo);
+            
+            // Calcular monto final
+            const montoFinal = monto - descuentoAplicado;
+            
+            // Calcular monto para alcanzar descuento máximo
+            const montoParaMaximo = maximo > 0 ? (maximo * 100) / porcentaje : 0;
+            
+            // Mostrar resultados
+            document.getElementById('descuentoAplicado').textContent = 
+                `$${descuentoAplicado.toFixed(2)}`;
+            document.getElementById('montoFinal').textContent = 
+                `$${montoFinal.toFixed(2)}`;
+            document.getElementById('montoMaximo').textContent = 
+                `$${montoParaMaximo.toFixed(2)}`;
+        }
+        
+        // Calcular automáticamente al cargar la página
+        window.onload = calcularDescuento;
+        
+        // Calcular al cambiar cualquier input
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', calcularDescuento);
+        });
+    </script>
+</body>
+</html>
